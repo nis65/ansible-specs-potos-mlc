@@ -1,0 +1,13 @@
+---
+{% if potos_runtype == 'setup' %}
+- name: firstboot
+  src: git+https://github.com/projectpotos/ansible-role-potos_firstboot
+  version: 'main'
+{% endif %}
+- name: basics
+  src: git+https://github.com/projectpotos/ansible-role-potos_basics.git
+  version: 'main'
+
+- name: wallpaper
+  src: git+https://github.com/projectpotos/ansible-role-potos_wallpaper.git
+  version: 'main'
