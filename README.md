@@ -1,8 +1,31 @@
-# Potos - Specification for Potos Vanilla
+# muetzi Linux Client
 
-This repository contains the specification for Potos Vanilla and can be used as a template for your own custom Linux Client based on Potos.
+(Initially generated from Potos Vanilla)
 
-[![Test](https://github.com/projectpotos/ansible-specs-potos/actions/workflows/test.yml/badge.svg)](https://github.com/projectpotos/ansible-specs-potos/actions/workflows/test.yml)
+I am using linux for my desktop since debian woody and am supporting
+family members with ubuntu clients since ubuntu dapper (?).
+
+The machines were deployed by cloning them from my own
+"gold installation" and with `grml` boot, `rsync` and
+reinstalling the boot loader.
+
+The clients work fully offline. But if there is connectivity,
+managed clients have an "always on" connection to my home
+VPN server. This is used for remote support, management
+and backup. My personal clients use the same VPN, but
+it is established manually from network manager.
+
+Clients in the home network can use an LDAP user for
+login and get a personal and read only share mounted
+automatically.
+
+The potos framework should enable me to implement
+all this and more in a modern, software defined way.
+
+I will use the issues on this repo to track requirements,
+gather ideas, etc.
+
+FIXME: this is fake: [![Test](https://github.com/projectpotos/ansible-specs-potos/actions/workflows/test.yml/badge.svg)](https://github.com/projectpotos/ansible-specs-potos/actions/workflows/test.yml)
 
 ## Most important files
 
