@@ -3,3 +3,5 @@
 potos_dconf_org_gnome_shell_favorite_apps:
   - "org.gnome.Nautilus.desktop"
   - "libreoffice-writer.desktop"
+
+potos_dconf_org_gnome_desktop_interface_clock_show_seconds: true
