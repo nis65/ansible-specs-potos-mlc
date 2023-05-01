@@ -13,3 +13,10 @@ potos_dconf_org_gnome_desktop_wm_preferences_auto_raise: false
 
 potos_dconf_org_gnome_desktop_interface_clock_show_seconds: true
 
+potos_dconf_20_window_manager:
+  preferences:
+    focus_mode: "sloppy"
+    auto_raise: false
+  keybindings:
+    raise_or_lower:
+      - "<Alt>1"
