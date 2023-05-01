@@ -6,7 +6,7 @@ potos_dconf_custom:
   - dconf_path: "org/gnome/desktop/interface"
     settings:
       - name: "clock-show-seconds"
-        value_bool: false
+        value_bool: true
   - dconf_path: "org/gnome/desktop/peripherals/mouse"
     settings:
       - name: "accel-profile"
