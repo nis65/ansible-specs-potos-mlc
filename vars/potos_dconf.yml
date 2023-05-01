@@ -7,10 +7,10 @@ potos_dconf_custom:
     settings:
       - name: "clock-show-seconds"
         value_bool: true
-  - dconf_path: "org/gnome/desktop/peripherals/mouse"
-    settings:
-      - name: "accel-profile"
-        value_string: "default"
+  #- dconf_path: "org/gnome/desktop/peripherals/mouse"
+  #  settings:
+  #    - name: "accel-profile"
+  #      value_string: "default"
   - dconf_path: "org/gnome/shell"
     settings:
       - name: "favorite-apps"
