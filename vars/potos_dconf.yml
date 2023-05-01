@@ -6,17 +6,17 @@ potos_dconf_org_gnome_shell_favorite_apps:
 
 potos_dconf_org_gnome_desktop_peripherals_mouse_accel_profile: "flat"
 
-potos_dconf_org_gnome_desktop_wm_keybindings_raise_or_lower:
-  - "<Alt>1"
-potos_dconf_org_gnome_desktop_wm_preferences_focus_mode: "sloppy"
-potos_dconf_org_gnome_desktop_wm_preferences_auto_raise: false
-
 potos_dconf_org_gnome_desktop_interface_clock_show_seconds: true
 
-potos_dconf_20_window_manager:
-  preferences:
-    focus_mode: "sloppy"
-    auto_raise: false
-  keybindings:
-    raise_or_lower:
-      - "<Alt>1"
+potos_dconf_20_advanced_wm_settings: true
+
+#potos_dconf_10_mouse:
+#  accel_profile: "flat"
+#
+#potos_dconf_20_window_manager:
+#  preferences:
+#    focus_mode: "sloppy"
+#    auto_raise: false
+#  keybindings:
+#    raise_or_lower:
+#      - "<Alt>1"
