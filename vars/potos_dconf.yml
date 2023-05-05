@@ -14,7 +14,7 @@ potos_dconf_custom:
   - dconf_path: "org/gnome/shell"
     settings:
       - name: "favorite-apps"
-        value_list_of_strings: 
+        value_list_of_strings:
           - "org.gnome.Nautilus.desktop"
           - "libreoffice-writer.desktop"
 
