@@ -1,0 +1,8 @@
+---
+
+potos_files:
+  src: "usr/local/share/applications/Local.desktop"
+  dest: "/usr/local/share/applications/Local.desktop"
+  owner: "root"
+  group: "root"
+  mode: "0644"
