@@ -1,0 +1,68 @@
+[Desktop Entry]
+Exec=nautilus %F
+Type=Application
+Name=Local
+#Actions=Files;Backup;Restore;GnuCash;GnucashClean;AdobeReader9;LibreOfficeWriter;LibreOfficeImpress;LibreOfficeCalc;VirtManager;Calculator
+Actions=Files;Backup;Restore;LibreOfficeWriter;LibreOfficeImpress;LibreOfficeCalc;VirtManager;Evince;Calculator
+Icon=gohome.svg
+
+[Desktop Action Files]
+Type=application
+Name=Files
+Exec=nautilus %F
+
+[Desktop Action Backup]
+Type=application
+Name=Backup
+Exec=/usr/bin/xterm -e /usr/local/bin/find_media_backup_restore backup
+
+[Desktop Action Restore]
+Type=application
+Name=Restore
+Exec=/usr/bin/xterm -e /usr/local/bin/find_media_backup_restore restore
+
+[Desktop Action GnuCash]
+Type=Application
+Name=GnuCash
+Exec=gnucash %f
+
+[Desktop Action GnucashClean]
+Name=Gnucash Clean
+Exec=/usr/bin/xterm -e /usr/local/bin/clean_gnucash
+Type=Application
+
+[Desktop Action AdobeReader9]
+Exec=acroread
+Type=application
+Name=Adobe Reader 9
+
+[Desktop Action LibreOfficeWriter]
+Exec=libreoffice --writer
+Type=application
+Name=LibreOffice Writer
+
+[Desktop Action LibreOfficeImpress]
+Exec=libreoffice --impress
+Type=application
+Name=LibreOffice Impress
+
+[Desktop Action LibreOfficeCalc]
+Exec=libreoffice --calc
+Type=application
+Name=LibreOffice Calc
+
+[Desktop Action VirtManager]
+Name=VirtManager
+Type=Application
+Exec=virt-manager
+
+[Desktop Action Evince]
+Name=Evince
+Type=Application
+Exec=evince %U
+
+[Desktop Action Calculator]
+Exec=gnome-calculator
+Type=application
+Name=Calculator
+
