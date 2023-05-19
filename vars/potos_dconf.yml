@@ -17,4 +17,5 @@ potos_dconf_custom:
         value_list_of_strings:
           - "org.gnome.Nautilus.desktop"
           - "libreoffice-writer.desktop"
+          - "Local.desktop"
 
