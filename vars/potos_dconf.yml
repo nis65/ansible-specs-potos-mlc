@@ -18,4 +18,5 @@ potos_dconf_custom:
           - "org.gnome.Nautilus.desktop"
           - "libreoffice-writer.desktop"
           - "Local.desktop"
+          - "Internet.desktop"
 
