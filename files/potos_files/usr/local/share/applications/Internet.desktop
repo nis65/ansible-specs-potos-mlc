@@ -1,0 +1,27 @@
+[Desktop Entry]
+Exec=/usr/bin/firefox %u
+Type=Application
+Name=Internet
+Actions=FirefoxWebBrowser;ChromiumWebBrowser;ClawsMail;GoogleEarth
+Icon=applications-internet
+
+[Desktop Action FirefoxWebBrowser]
+Type=Application
+Name=Firefox Web Browser
+Exec=/usr/bin/firefox %u
+
+[Desktop Action ChromiumWebBrowser]
+Type=application
+Name=Chromium Web Browser
+Exec=/snap/bin/chromium
+
+[Desktop Action GoogleEarth]
+Type=application
+Name=Google Earth
+Exec=/opt/google/earth/pro/google-earth-pro
+
+[Desktop Action ClawsMail]
+Icon=claws-mail
+Type=application
+Name=Claws Mail
+Exec=claws-mail

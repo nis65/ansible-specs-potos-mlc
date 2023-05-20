@@ -1,0 +1,7 @@
+---
+
+potos_files:
+  - src: "usr/local/share/applications/Local.desktop"
+    dest: "/usr/local/share/applications/Local.desktop"
+  - src: "usr/local/share/applications/Internet.desktop"
+    dest: "/usr/local/share/applications/Internet.desktop"
