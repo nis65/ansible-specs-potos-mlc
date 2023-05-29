@@ -2,3 +2,5 @@
 
 potos_apt_packages:
   - firefox
+  - apt-file
+  - swsusp
