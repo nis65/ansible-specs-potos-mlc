@@ -4,3 +4,4 @@ potos_apt_packages:
   - firefox
   - apt-file
   - pm-utils
+  - gnome-screensaver
