@@ -2,3 +2,4 @@
 
 potos_firstboot_local_user_add_with_sudo: true
 potos_firstboot_local_user_add_without_sudo: true
+potos_firstboot_initial_user_delete_admin_iso_user: false
