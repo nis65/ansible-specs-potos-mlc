@@ -1,7 +1,5 @@
 # muetzi Linux Client
 
-(Initially generated from Potos Vanilla)
-
 I am using linux for my desktop since debian woody and am supporting
 family members with ubuntu clients since ubuntu dapper (?).
 
@@ -9,23 +7,34 @@ The machines were deployed by cloning them from my own
 "gold installation" and with `grml` boot, `rsync` and
 reinstalling the boot loader.
 
-The clients work fully offline. But if there is connectivity,
-managed clients have an "always on" connection to my home
-VPN server. This is used for remote support, management
-and backup. My personal clients use the same VPN, but
-it is established manually from network manager.
+This specs repo (together with a few additional roles)
+is used to manage the zoo of my family desktop machines.
+There are three flavours i need to support
 
-Clients in the home network can use an LDAP user for
-login and get a personal and read only share mounted
-automatically.
+* the desktop node is integrated into the home network (LDAP login, network data shares)
+* the road warriors can work offline, but if online they can establish a VPN connection to the home
+  network in two ways:
+  * a *fully managed* host establishes automatically the VPN connection but it is
+    used to get remote support only.
+  * a manually managed host (my own) where the VPN connection is manually
+    established and usually used to access more services from the home  network.
 
-The potos framework should enable me to implement
-all this and more in a modern, software defined way.
-
-I will use the issues on this repo to track requirements,
-gather ideas, etc.
+Some of the advanced features are not suitable for all family members,
+so I might need to maintain multiple specs repository branches.
 
 FIXME: this is fake: [![Test](https://github.com/projectpotos/ansible-specs-potos/actions/workflows/test.yml/badge.svg)](https://github.com/projectpotos/ansible-specs-potos/actions/workflows/test.yml)
+
+## current state
+
+The current setup is a combination of
+* **U** unchanged potos roles (all values at their defaults)
+* **V** potos roles with additional **v**ariables set
+* **C** potos roles from my own repo (as the upstream needs some time to merge my **c**ontributions)
+* **O** my own roles derived from the potos template role.
+
+
+
+
 
 ## Most important files
 
@@ -37,11 +46,9 @@ List with required collections that need to be installed e.g.
 ```
 ---
 collections:
-  - ansible.posix 
+  - ansible.posix
 ```
 or [here](https://github.com/projectpotos/ansible-specs-potos/blob/main/templates/collections.yml.j2) the example from this repo
-
-## 
 
 # vars
 
