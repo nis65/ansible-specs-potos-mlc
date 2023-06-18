@@ -4,3 +4,5 @@ potos_apt_packages:
   - firefox
   - apt-file
   - pm-utils
+  - smbclient
+  - cifs-utils

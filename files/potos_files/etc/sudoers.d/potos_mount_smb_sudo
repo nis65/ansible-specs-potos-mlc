@@ -1,0 +1,3 @@
+Defaults!/usr/sbin/mount.cifs env_keep+=PASSWD
+ALL     ALL=(root) NOPASSWD: /usr/sbin/mount.cifs *
+ALL     ALL=(root) NOPASSWD: /usr/bin/umount -t cifs *

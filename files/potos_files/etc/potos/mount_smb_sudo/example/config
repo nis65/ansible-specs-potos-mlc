@@ -1,0 +1,4 @@
+# this is sourced from a bash script
+SMBHOST=mysamba.host.domain
+SMBDOMAIN=WORKGROUP
+HOMEBASE=myshares
