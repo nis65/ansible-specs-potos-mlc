@@ -11,7 +11,7 @@
 # smbclient
 # cifs-utils
 
-CONFIG_SRC_DIR=/etc/potos/mount_smb_sudo
+CONFIG_SRC_DIR=/etc/potos_all/mount_smb_sudo
 
 ################################# usage ##############################
 
