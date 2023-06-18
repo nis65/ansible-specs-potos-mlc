@@ -1,0 +1,294 @@
+#!/bin/bash
+### SPECS
+### * list all found configs
+###
+### * mount all accessible shares from a certain server to a certain subdir in my localhome
+### * umount them
+### * check if and if yes how many shares of a certain server are mounted
+### * check if an ls in the first mounted shares succeeds ("live status")
+
+### packages needed:
+# smbclient
+# cifs-utils
+
+CONFIG_SRC_DIR=/etc/potos/mount_smb_sudo
+
+################################# usage ##############################
+
+usage () {
+
+cat << EOF
+
+Usage:
+
+$0 -l
+
+  list available configurations (smb targets)
+
+$0 -s <config> [-q] [-m|-c|-v|-u [-y]]
+
+  -s selects the target configuration
+  -q quiet
+  -m mount all allowed shares
+  -c count all mounted shares
+  -v verify the first mounted share by a read access
+  -u umount all mounted shares
+  -y do a lazy umount, recommended on shutdown only
+
+EOF
+
+exit 1
+
+}
+
+
+################################# parse cli ##############################
+
+LIST=no
+SELECTED=none
+QUIET=no
+MOUNT=no
+COUNT=no
+VERIFY=no
+UMOUNT=no
+LAZY=no
+XCOUNT=0
+while getopts ls:qmcvuy option
+do
+  case $option in
+    l) LIST=yes ;;
+    s) SELECTED=$OPTARG
+       CONFIG=${CONFIG_SRC_DIR}/${SELECTED}/config
+       if [[ -r $CONFIG ]]
+       then
+         . $CONFIG
+       else
+	 echo "ERROR: $CONFIG not readable"
+	 usage
+       fi
+       ;;
+    q) QUIET=yes ;;
+    m) MOUNT=yes ; XCOUNT=$(( XCOUNT + 1 )) ;;
+    c) COUNT=yes ; XCOUNT=$(( XCOUNT + 1 )) ;;
+    v) VERIFY=yes ; XCOUNT=$(( XCOUNT + 1 )) ;;
+    u) UMOUNT=yes ; XCOUNT=$(( XCOUNT + 1 )) ;;
+    y) LAZY=yes ;;
+    \?) usage ;;
+  esac
+done
+
+################################# debug message function ##############################
+
+debug () {
+if [[ "${QUIET}" == "no" ]]
+then
+  cat
+else
+  cat > /dev/null
+fi
+}
+
+################################# map remote user name if possible ##############################
+
+remote_user () {
+  local_user=$( whoami )
+  remote_user=$( sed -ne "s/^${local_user}[[:space:]][[:space:]]*\(.*\)[[:space:]]*$/\1/p" < ${CONFIG_SRC_DIR}/${SELECTED}/usermap )
+  if [[ -z "${remote_user}" ]]
+  then
+    remote_user=$local_user
+  fi
+  echo "${remote_user}"
+}
+
+################################# create dir if needed function ##############################
+
+create_dir_if_needed () {
+newdir="$1"
+
+if [[ ! -d $newdir ]]
+then
+  echo "$newdir: creating" | debug
+  if ! mkdir -p $newdir
+  then
+    echo "Fail, Abort"
+    exit 1
+  fi
+fi
+}
+
+################################# main (after initial parameter parsing) ##############################
+
+if [[ "${LIST}" == "yes" ]]
+then
+  echo "Available configurations in ${CONFIG_SRC_DIR}"
+  echo ""
+  ( cd ${CONFIG_SRC_DIR} ; ls -1 )
+  echo ""
+  exit 0
+fi
+
+
+if [[ "${SELECTED}" == "none" ]]
+then
+  echo ""
+  echo "ERROR: Need -s or -l as parameter"
+  usage
+fi
+
+( echo SELECTED  $SELECTED
+  echo SMBHOST   $SMBHOST
+  echo SMBDOMAIN $SMBDOMAIN
+  echo HOMEBASE  $HOMEBASE
+) | debug
+
+
+if [[ $XCOUNT -ne 1 ]]
+then
+  echo ""
+  echo "ERROR: need exactly one of -m -c -v -u"
+  echo ""
+  usage
+fi
+
+if [[ "${MOUNT}" == "yes" ]]
+then
+  echo "MOUNTING..." | debug
+  SMBUSER=$( remote_user )
+  echo SMBUSER $SMBUSER | debug
+
+  echo -n "Enter Password for $SMBUSER on $SMBHOST: "
+  read -s SMBPASS
+  echo ""
+
+  # PASSWD is read implicitly from smbclient
+  export PASSWD=$SMBPASS
+
+  echo "smbclient -L $SMBHOST -U $SMBUSER -W $SMBDOMAIN" | debug
+  REMOTELIST=$( mktemp -p /tmp remotelist.XXXXXX )
+  smbclient -L $SMBHOST -U $SMBUSER -W $SMBDOMAIN > $REMOTELIST
+  RESULT=$?
+  unset PASSWD
+
+  if [[ $RESULT -eq 0 ]]
+  then
+    cat $REMOTELIST | debug
+    SHARELIST=$( cat $REMOTELIST | grep Disk | awk ' { print $1 } ' | egrep -v 'netlogon|sysvol|print\$' | sort )
+    echo "$SHARELIST" | debug
+    rm $REMOTELIST
+    for share in $SMBUSER $SHARELIST
+    do
+      MOUNTDIR=~/$HOMEBASE/$share
+
+      if mount | grep "type cifs" | grep $MOUNTDIR > /dev/null 2> /dev/null
+      then
+        echo "$MOUNTDIR: ignoring, already mounted"
+        continue
+      fi
+
+      create_dir_if_needed $MOUNTDIR
+      echo "$MOUNTDIR: trying to mount share $share" | debug
+
+      MOUNTSUCCESS=no
+
+      # PASSWD is read implicitly from mount.cifs, but as mount.cifs is called
+      # from sudo, the PASSWD variable must be passed to sudo:
+      # This needs the following eg. in /etc/sudoers.d/90-cifs-mount-conf
+      #   Defaults!/usr/sbin/mount.cifs env_keep+=PASSWD
+      #   ALL     ALL=(root) NOPASSWD: /usr/sbin/mount.cifs *
+
+      PASSWD=$SMBPASS
+      export PASSWD
+      echo sudo mount.cifs -o username=$SMBUSER,gid=$(id -g),uid=$(id -u) //$SMBHOST/$share $MOUNTDIR | debug
+      sudo mount.cifs -o username=$SMBUSER,gid=$(id -g),uid=$(id -u) //$SMBHOST/$share $MOUNTDIR > /dev/null 2>&1
+      RESULT=$?
+      unset PASSWD
+
+      case $RESULT in
+        32) echo "$RESULT: no auth" | debug ;;
+         0) echo "$RESULT: success" | debug ; MOUNTSUCCESS=yes ;;
+         *) echo "$RESULT: huh?" | debug ;;
+      esac
+
+      case $MOUNTSUCCESS in
+        abortall ) echo "Aborting"; exit 1 ;;
+        yes      ) echo "$MOUNTDIR: success" ;;
+        *        ) echo "$MOUNTDIR: removing: not enough permissions to mount"; rmdir $MOUNTDIR ;;
+      esac
+
+    done
+  else
+    echo "ABORT: wrong password, server not reachable, ... "
+    echo -n "Error from smbclient: " | debug
+    cat $REMOTELIST | debug
+    rm $REMOTELIST
+    exit 1
+  fi
+fi
+
+if [[ "${COUNT}" == "yes" ]]
+then
+  echo "COUNTING..." | debug
+  mount | grep $SMBHOST | debug
+  mount | grep $SMBHOST | wc -l
+  exit 0
+fi
+
+if [[ "${VERIFY}" == "yes" ]]
+then
+  echo "VERIFYING..." | debug
+  FIRSTMOUNTEDFS=$(mount | grep $SMBHOST | head -1 | sed -e "s/^.* on \(.*\) type cifs.*$/\1/" )
+  if [[ -z "$FIRSTMOUNTEDFS" ]]
+  then
+    echo "no mounted filesystem found from $SMBHOST to verify"
+    exit 1
+  fi
+  echo $FIRSTMOUNTEDFS | debug
+  if ls -1 $FIRSTMOUNTEDFS >/dev/null 2>/dev/null
+  then
+    ls -l $FIRSTMOUNTEDFS | head -5 | debug
+    echo "..." | debug
+    echo "access to $FIRSTMOUNTEDFS ok"
+    exit 0
+  else
+    echo "access to $FIRSTMOUNTEDFS NOT ok"
+    exit 1
+  fi
+fi
+
+
+if [[ "${UMOUNT}" == "yes" ]]
+then
+  if [[ "${LAZY}" == "yes" ]]
+  then
+    echo "LAZY UMOUNTING..." | debug
+    LAZYOPTION="-l"
+  else
+    echo "UMOUNTING..." | debug
+    LAZYOPTION=""
+  fi
+  MOUNTPOINTS=$( mount | grep $SMBHOST | awk ' { print $3 } ' )
+  if [[ -z "${MOUNTPOINTS}" ]]
+  then
+    echo "no mounted filesystem left from $SMBHOST to umount, all good"
+    exit 0
+  fi
+  for M in $MOUNTPOINTS
+  do
+    echo "Trying to umount $M" | debug
+    retrycount=3
+    while ! sudo umount -t cifs ${LAZYOPTION} $M
+    do
+      if [[ $retrycount -gt 1 ]]
+      then
+        echo retrying
+        retrycount=$(( retrycount -1 ))
+        sleep 2
+      else
+        echo "Failed to umount $M even after retrying, abort"
+        exit 1
+      fi
+    done
+    echo "$M umounted ok"
+  done
+  exit
+fi
