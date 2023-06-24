@@ -17,3 +17,5 @@ potos_files:
     dest: "/etc/potos_all/mount_smb_sudo/example/usermap"
   - src: "etc/vim/vimrc.local"
     dest: "/etc/vim/vimrc.local"
+  - src: "etc/profile.d/Z99-mlc-settings.sh"
+    dest: "/etc/profile.d/Z99-mlc-settings.sh"
