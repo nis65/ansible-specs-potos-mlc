@@ -1,0 +1,7 @@
+set showmatch          " Show matching brackets.
+set ignorecase         " Do case insensitive matching
+
+set foldmethod=marker
+set commentstring=#%s
+set mouse=""
+

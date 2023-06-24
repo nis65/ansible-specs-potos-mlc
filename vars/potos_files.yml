@@ -15,3 +15,5 @@ potos_files:
     dest: "/etc/potos_all/mount_smb_sudo/example/config"
   - src: "etc/potos_all/mount_smb_sudo/example/usermap"
     dest: "/etc/potos_all/mount_smb_sudo/example/usermap"
+  - src: "etc/vim/vimrc.local"
+    dest: "/etc/vim/vimrc.local"
