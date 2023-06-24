@@ -6,3 +6,5 @@ potos_apt_packages:
   - pm-utils
   - smbclient
   - cifs-utils
+  - dbus-x11
+  - blockout2
