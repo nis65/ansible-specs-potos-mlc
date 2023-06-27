@@ -9,3 +9,7 @@ potos_apt_packages:
   - dbus-x11
   - blockout2
   - claws-mail
+  - gnome-remote-desktop
+  - pipewire-media-session
+  - mpc
+  - pavucontrol
