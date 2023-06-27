@@ -8,3 +8,4 @@ potos_apt_packages:
   - cifs-utils
   - dbus-x11
   - blockout2
+  - claws-mail
