@@ -1,0 +1,8 @@
+[Allow users to configure a new WLAN connection]
+
+Identity=unix-group:{{ potos_files_allow_group }}
+Action=org.freedesktop.NetworkManager.settings.modify.system
+ResultyAny=no
+ResultInactive=no
+ResultActive=yes
+

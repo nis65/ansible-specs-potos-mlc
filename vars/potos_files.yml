@@ -19,3 +19,7 @@ potos_files:
     dest: "/etc/vim/vimrc.local"
   - src: "etc/profile.d/Z99-mlc-settings.sh"
     dest: "/etc/profile.d/Z99-mlc-settings.sh"
+  - src: "etc/polkit-1/localauthority/50-local.d/10-allow-users-wlan-config.pkla"
+    dest: "/etc/polkit-1/localauthority/50-local.d/10-allow-users-wlan-config.pkla"
+
+potos_files_allow_group: "potos"
