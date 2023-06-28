@@ -1,17 +1,11 @@
 #!/bin/bash
-### SPECS
-### * list all found configs
-###
-### * mount all accessible shares from a certain server to a certain subdir in my localhome
-### * umount them
-### * check if and if yes how many shares of a certain server are mounted
-### * check if an ls in the first mounted shares succeeds ("live status")
-
-### packages needed:
+# packages needed:
 # smbclient
 # cifs-utils
+# coreutils
 
-CONFIG_SRC_DIR=/etc/potos_all/mount_smb_sudo
+# default value, can be overriden by -t
+VERIFYTIMEOUT=15
 
 ################################# usage ##############################
 
@@ -21,17 +15,17 @@ cat << EOF
 
 Usage:
 
-$0 -l
+$0 -s smbhost -d smbdomain -b basedir -u smbuser [-q] [-m|-c|-v [-t]|-u [-y]]
 
-  list available configurations (smb targets)
-
-$0 -s <config> [-q] [-m|-c|-v|-u [-y]]
-
-  -s selects the target configuration
+  -s hostname or ip address of smb/cifs server
+  -d smb domain
+  -b basedir in home where all mountpoints will we created
+  -n user name used to identify on the smbhost
   -q quiet
   -m mount all allowed shares
   -c count all mounted shares
   -v verify the first mounted share by a read access
+  -t optional timeout for verify, defaults to $VERIFYTIMEOUT
   -u umount all mounted shares
   -y do a lazy umount, recommended on shutdown only
 
@@ -44,8 +38,10 @@ exit 1
 
 ################################# parse cli ##############################
 
-LIST=no
-SELECTED=none
+SMBHOST=none
+SMBDOMAIN=none
+HOMEBASE=none
+SMBUSER=none
 QUIET=no
 MOUNT=no
 COUNT=no
@@ -53,24 +49,18 @@ VERIFY=no
 UMOUNT=no
 LAZY=no
 XCOUNT=0
-while getopts ls:qmcvuy option
+while getopts s:d:b:n:qmcvt:uy option
 do
   case $option in
-    l) LIST=yes ;;
-    s) SELECTED=$OPTARG
-       CONFIG=${CONFIG_SRC_DIR}/${SELECTED}/config
-       if [[ -r $CONFIG ]]
-       then
-         . $CONFIG
-       else
-	 echo "ERROR: $CONFIG not readable"
-	 usage
-       fi
-       ;;
+    s) SMBHOST=$OPTARG ;;
+    d) SMBDOMAIN=$OPTARG ;;
+    b) HOMEBASE=$OPTARG ;;
+    n) SMBUSER=$OPTARG ;;
     q) QUIET=yes ;;
     m) MOUNT=yes ; XCOUNT=$(( XCOUNT + 1 )) ;;
     c) COUNT=yes ; XCOUNT=$(( XCOUNT + 1 )) ;;
     v) VERIFY=yes ; XCOUNT=$(( XCOUNT + 1 )) ;;
+    t) VERIFYTIMEOUT=$OPTARG ;;
     u) UMOUNT=yes ; XCOUNT=$(( XCOUNT + 1 )) ;;
     y) LAZY=yes ;;
     \?) usage ;;
@@ -86,18 +76,6 @@ then
 else
   cat > /dev/null
 fi
-}
-
-################################# map remote user name if possible ##############################
-
-remote_user () {
-  local_user=$( whoami )
-  remote_user=$( sed -ne "s/^${local_user}[[:space:]][[:space:]]*\(.*\)[[:space:]]*$/\1/p" < ${CONFIG_SRC_DIR}/${SELECTED}/usermap )
-  if [[ -z "${remote_user}" ]]
-  then
-    remote_user=$local_user
-  fi
-  echo "${remote_user}"
 }
 
 ################################# create dir if needed function ##############################
@@ -116,31 +94,25 @@ then
 fi
 }
 
-################################# main (after initial parameter parsing) ##############################
-
-if [[ "${LIST}" == "yes" ]]
-then
-  echo "Available configurations in ${CONFIG_SRC_DIR}"
-  echo ""
-  ( cd ${CONFIG_SRC_DIR} ; ls -1 )
-  echo ""
-  exit 0
-fi
+################################# main (some parameter checking) ##############################
 
 
-if [[ "${SELECTED}" == "none" ]]
-then
-  echo ""
-  echo "ERROR: Need -s or -l as parameter"
-  usage
-fi
-
-( echo SELECTED  $SELECTED
+( echo SMBUSER   $SMBUSER
   echo SMBHOST   $SMBHOST
   echo SMBDOMAIN $SMBDOMAIN
   echo HOMEBASE  $HOMEBASE
 ) | debug
 
+case "none" in
+  $SMBUSER|$SMBHOST|$SMBDOMAIN|$HOMEBASE )
+     echo ""
+     echo "ERROR: all of these parameters must be set"
+     echo "-s '$SMBHOST' -d '$SMBDOMAIN' -b '$HOMEBASE' -u '$SMBUSER' "
+     echo ""
+     usage
+     ;;
+  *) true ;;
+esac
 
 if [[ $XCOUNT -ne 1 ]]
 then
@@ -150,11 +122,11 @@ then
   usage
 fi
 
+################################# main (now do it really) ##############################
+
 if [[ "${MOUNT}" == "yes" ]]
 then
   echo "MOUNTING..." | debug
-  SMBUSER=$( remote_user )
-  echo SMBUSER $SMBUSER | debug
 
   echo -n "Enter Password for $SMBUSER on $SMBHOST: "
   read -s SMBPASS
@@ -242,17 +214,24 @@ then
     echo "no mounted filesystem found from $SMBHOST to verify"
     exit 1
   fi
-  echo $FIRSTMOUNTEDFS | debug
-  if ls -1 $FIRSTMOUNTEDFS >/dev/null 2>/dev/null
-  then
-    ls -l $FIRSTMOUNTEDFS | head -5 | debug
-    echo "..." | debug
-    echo "access to $FIRSTMOUNTEDFS ok"
-    exit 0
-  else
-    echo "access to $FIRSTMOUNTEDFS NOT ok"
-    exit 1
-  fi
+
+  echo "testing $FIRSTMOUNTEDFS for $VERIFYTIMEOUT seconds" | debug
+  timeout $VERIFYTIMEOUT ls -1 $FIRSTMOUNTEDFS >/dev/null 2>/dev/null
+  RETVAL=$?
+  case $RETVAL in
+    124 ) echo "access to $FIRSTMOUNTEDFS NOT ok, timeout"
+          exit 1
+	  ;;
+      0 ) ls -l $FIRSTMOUNTEDFS | head -5 | debug
+          echo "..." | debug
+          echo "access to $FIRSTMOUNTEDFS ok"
+	  exit 0
+	  ;;
+      * ) ls -l $FIRSTMOUNTEDFS 2>&1 | head -5 | debug
+	  echo "access to $FIRSTMOUNTEDFS NOT ok, RETVAL $RETVAL"
+          exit 1
+	  ;;
+  esac
 fi
 
 
