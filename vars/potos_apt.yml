@@ -13,3 +13,4 @@ potos_apt_packages:
   - pipewire-media-session
   - mpc
   - pavucontrol
+  - coreutils
