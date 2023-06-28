@@ -2,6 +2,10 @@
 # packages needed:
 # smbclient
 # cifs-utils
+# coreutils
+
+# default value, can be overriden by -t
+VERIFYTIMEOUT=15
 
 ################################# usage ##############################
 
@@ -11,7 +15,7 @@ cat << EOF
 
 Usage:
 
-$0 -s smbhost -d smbdomain -b basedir -u smbuser [-q] [-m|-c|-v|-u [-y]]
+$0 -s smbhost -d smbdomain -b basedir -u smbuser [-q] [-m|-c|-v [-t]|-u [-y]]
 
   -s hostname or ip address of smb/cifs server
   -d smb domain
@@ -21,6 +25,7 @@ $0 -s smbhost -d smbdomain -b basedir -u smbuser [-q] [-m|-c|-v|-u [-y]]
   -m mount all allowed shares
   -c count all mounted shares
   -v verify the first mounted share by a read access
+  -t optional timeout for verify, defaults to $VERIFYTIMEOUT
   -u umount all mounted shares
   -y do a lazy umount, recommended on shutdown only
 
@@ -44,7 +49,7 @@ VERIFY=no
 UMOUNT=no
 LAZY=no
 XCOUNT=0
-while getopts s:d:b:n:qmcvuy option
+while getopts s:d:b:n:qmcvt:uy option
 do
   case $option in
     s) SMBHOST=$OPTARG ;;
@@ -55,6 +60,7 @@ do
     m) MOUNT=yes ; XCOUNT=$(( XCOUNT + 1 )) ;;
     c) COUNT=yes ; XCOUNT=$(( XCOUNT + 1 )) ;;
     v) VERIFY=yes ; XCOUNT=$(( XCOUNT + 1 )) ;;
+    t) VERIFYTIMEOUT=$OPTARG ;;
     u) UMOUNT=yes ; XCOUNT=$(( XCOUNT + 1 )) ;;
     y) LAZY=yes ;;
     \?) usage ;;
@@ -208,17 +214,24 @@ then
     echo "no mounted filesystem found from $SMBHOST to verify"
     exit 1
   fi
-  echo $FIRSTMOUNTEDFS | debug
-  if ls -1 $FIRSTMOUNTEDFS >/dev/null 2>/dev/null
-  then
-    ls -l $FIRSTMOUNTEDFS | head -5 | debug
-    echo "..." | debug
-    echo "access to $FIRSTMOUNTEDFS ok"
-    exit 0
-  else
-    echo "access to $FIRSTMOUNTEDFS NOT ok"
-    exit 1
-  fi
+
+  echo "testing $FIRSTMOUNTEDFS for $VERIFYTIMEOUT seconds" | debug
+  timeout $VERIFYTIMEOUT ls -1 $FIRSTMOUNTEDFS >/dev/null 2>/dev/null
+  RETVAL=$?
+  case $RETVAL in
+    124 ) echo "access to $FIRSTMOUNTEDFS NOT ok, timeout"
+          exit 1
+	  ;;
+      0 ) ls -l $FIRSTMOUNTEDFS | head -5 | debug
+          echo "..." | debug
+          echo "access to $FIRSTMOUNTEDFS ok"
+	  exit 0
+	  ;;
+      * ) ls -l $FIRSTMOUNTEDFS 2>&1 | head -5 | debug
+	  echo "access to $FIRSTMOUNTEDFS NOT ok, RETVAL $RETVAL"
+          exit 1
+	  ;;
+  esac
 fi
 
 
