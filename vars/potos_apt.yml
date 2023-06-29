@@ -14,3 +14,4 @@ potos_apt_packages:
   - mpc
   - pavucontrol
   - coreutils
+  - snapclient
