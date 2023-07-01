@@ -1,5 +1,10 @@
 ---
 
+potos_apt_repository:
+  ansible-ppa:
+    filename: ansible-ppa
+    repo: ppa:ansible/ansible
+
 potos_apt_packages:
   - firefox
   - apt-file
@@ -16,3 +21,4 @@ potos_apt_packages:
   - coreutils
   - snapclient
   - sonata
+  - ansible
