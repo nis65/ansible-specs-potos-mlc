@@ -8,6 +8,9 @@ potos_files:
   - src: "usr/local/bin/mount_smb_sudo"
     dest: "/usr/local/bin/mount_smb_sudo"
     mode: "755"
+  - src: "usr/local/bin/create_menu_actions_desktop.sh"
+    dest: "/usr/local/bin/create_menu_actions_desktop.sh"
+    mode: "755"
   - src: "etc/sudoers.d/potos_mount_smb_sudo"
     dest: "/etc/sudoers.d/potos_mount_smb_sudo"
     mode: "640"
@@ -17,5 +20,7 @@ potos_files:
     dest: "/etc/profile.d/Z99-mlc-settings.sh"
   - src: "etc/polkit-1/localauthority/50-local.d/10-allow-users-wlan-config.pkla"
     dest: "/etc/polkit-1/localauthority/50-local.d/10-allow-users-wlan-config.pkla"
+  - src: "usr/local/src/potos_files/ssh_controlmaster.conf"
+    dest: "/usr/local/src/potos_files/ssh_controlmaster.conf"
 
 potos_files_allow_group: "potos"
