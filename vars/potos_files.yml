@@ -17,5 +17,7 @@ potos_files:
     dest: "/etc/profile.d/Z99-mlc-settings.sh"
   - src: "etc/polkit-1/localauthority/50-local.d/10-allow-users-wlan-config.pkla"
     dest: "/etc/polkit-1/localauthority/50-local.d/10-allow-users-wlan-config.pkla"
+  - src: "usr/local/src/potos_files/ssh_controlmaster.conf"
+    dest: "/usr/local/src/potos_files/ssh_controlmaster.conf"
 
 potos_files_allow_group: "potos"
