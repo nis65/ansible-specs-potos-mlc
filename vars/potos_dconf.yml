@@ -15,8 +15,7 @@ potos_dconf_custom:
     settings:
       - name: "favorite-apps"
         value_list_of_strings:
-          - "org.gnome.Nautilus.desktop"
-          - "libreoffice-writer.desktop"
+          - "amsel-menu.desktop"
           - "Local.desktop"
           - "Internet.desktop"
 
