@@ -21,4 +21,5 @@ potos_apt_packages:
   - coreutils
   - snapclient
   - sonata
+  - keepassxc
   - ansible
