@@ -7,16 +7,19 @@ potos_dconf_custom:
     settings:
       - name: "clock-show-seconds"
         value_bool: true
-  #- dconf_path: "org/gnome/desktop/peripherals/mouse"
-  #  settings:
-  #    - name: "accel-profile"
-  #      value_string: "default"
+  - dconf_path: "org/gnome/settings-daemon/plugins/power"
+    settings:
+      - name: "ambient-enabled"
+        value_bool: false
+  - dconf_path: "org/gnome/desktop/session"
+    settings:
+      - name: "idle-delay"
+        value_uint32: "120"
   - dconf_path: "org/gnome/shell"
     settings:
       - name: "favorite-apps"
         value_list_of_strings:
-          - "org.gnome.Nautilus.desktop"
-          - "libreoffice-writer.desktop"
+          - "amsel-menu.desktop"
           - "Local.desktop"
           - "Internet.desktop"
 
