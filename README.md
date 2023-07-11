@@ -4,8 +4,8 @@ I am using linux for my desktop since debian woody and am supporting
 family members with ubuntu clients since ubuntu dapper (?).
 
 The machines were deployed by cloning them from my own
-"gold installation" and with `grml` boot, `rsync` and
-reinstalling the boot loader.
+"gold installation" with `grml` boot, `rsync` and
+reinstalling the boot loader in the `grml-chroot`.
 
 This is all history now - thanks to the potos framework:
 
@@ -18,7 +18,7 @@ There are three flavours i need to support:
   network in two ways:
   * (implemented) a *fully managed* host establishes automatically the VPN connection but it is
     used to get remote support only.
-  * (tested) a less managed host (my own) where the VPN connection is manually
+  * (in production) a less managed host (my own) where the VPN connection is manually
     established and usually used to access more services from the home  network.
 
 Some of the advanced features are not suitable for all family members,
@@ -111,16 +111,6 @@ The first is needed to make the swap partition big enough to store all RAM conte
 The second limits the used disk size to 50GB, and leaving the rest of available storage in the VG.
 If more disk space is needed, an administrator can resize the partition on the fly by adding space
 from the VG.
-
-
-
-
-
-
-
-
-
-```
 
 ## Other important files
 
