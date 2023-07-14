@@ -22,5 +22,17 @@ potos_files:
     dest: "/etc/polkit-1/localauthority/50-local.d/10-allow-users-wlan-config.pkla"
   - src: "usr/local/src/potos_files/ssh_controlmaster.conf"
     dest: "/usr/local/src/potos_files/ssh_controlmaster.conf"
+  - src: "etc/mlc/yaru_override.css"
+    dest: "/etc/mlc/yaru_override.css"
 
 potos_files_allow_group: "potos"
+
+potos_files_diverts:
+  - path: "/usr/share/themes/Yaru/gtk-3.0/gtk.css"
+    holder: "mlc"
+    linematch: "/etc/mlc/potos_yaru_override.css"
+    linecontent: '@import "/etc/mlc/potos_yaru_override.css";'
+  - path: "/usr/share/themes/Yaru/gtk-3.0/gtk-dark.css"
+    holder: "mlc"
+    linematch: "/etc/mlc/yaru_override.css"
+    linecontent: '@import "/etc/mlc/yaru_override.css";'

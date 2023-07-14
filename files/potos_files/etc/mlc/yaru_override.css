@@ -1,0 +1,11 @@
+terminal-window notebook {
+  border-width: 0px 1px 1px 1px;
+  border-style: solid;
+  border-color: grey;
+}
+
+terminal-window.maximized notebook,
+terminal-window.fullscreen notebook {
+  border-style: none;
+}
+
