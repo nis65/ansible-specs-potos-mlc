@@ -30,8 +30,8 @@ potos_files_allow_group: "potos"
 potos_files_diverts:
   - path: "/usr/share/themes/Yaru/gtk-3.0/gtk.css"
     holder: "mlc"
-    linematch: "/etc/mlc/potos_yaru_override.css"
-    linecontent: '@import "/etc/mlc/potos_yaru_override.css";'
+    linematch: "/etc/mlc/yaru_override.css"
+    linecontent: '@import "/etc/mlc/yaru_override.css";'
   - path: "/usr/share/themes/Yaru/gtk-3.0/gtk-dark.css"
     holder: "mlc"
     linematch: "/etc/mlc/yaru_override.css"
