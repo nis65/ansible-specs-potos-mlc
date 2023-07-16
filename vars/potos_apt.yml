@@ -15,6 +15,8 @@ potos_apt_repository:
 
 potos_apt_packages:
   - firefox
+  - chromium-browser
+  - chromium-codecs-ffmpeg
   - apt-file
   - pm-utils
   - smbclient
