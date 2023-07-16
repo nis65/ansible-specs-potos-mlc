@@ -22,4 +22,7 @@ potos_apt_packages:
   - snapclient
   - sonata
   - keepassxc
+  - texlive-latex-extra
+  - texlive-lang-german
+  - texlive-fonts-extra
   - ansible

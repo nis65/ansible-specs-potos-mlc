@@ -2,6 +2,8 @@
 
 potos_dconf_20_advanced_wm_settings: true
 
+potos_dconf_30_gnome_terminal_profiles: true
+
 potos_dconf_custom:
   - dconf_path: "org/gnome/desktop/interface"
     settings:
