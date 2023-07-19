@@ -37,5 +37,6 @@ potos_apt_packages:
   - texlive-fonts-extra
   - virt-manager
   - virt-viewer
+  - remmina
   - ansible
   - google-earth-pro-stable
