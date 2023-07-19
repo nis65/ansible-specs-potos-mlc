@@ -21,6 +21,7 @@ potos_dconf_custom:
     settings:
       - name: "favorite-apps"
         value_list_of_strings:
+          - "adfi-menu.desktop"
           - "amsel-menu.desktop"
           - "Local.desktop"
           - "Internet.desktop"
