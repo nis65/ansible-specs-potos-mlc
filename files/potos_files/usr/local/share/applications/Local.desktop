@@ -14,12 +14,12 @@ Exec=nautilus %F
 [Desktop Action Backup]
 Type=application
 Name=Backup
-Exec=/usr/bin/xterm -e /usr/local/bin/find_media_backup_restore backup
+Exec=gnome-terminal -- /usr/local/bin/find-media-backup-restore backup
 
 [Desktop Action Restore]
 Type=application
 Name=Restore
-Exec=/usr/bin/xterm -e /usr/local/bin/find_media_backup_restore restore
+Exec=gnome-terminal -- /usr/local/bin/find-media-backup-restore restore
 
 [Desktop Action GnuCash]
 Type=Application

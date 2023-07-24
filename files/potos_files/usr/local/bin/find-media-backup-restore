@@ -1,0 +1,69 @@
+#!/bin/bash
+MEDIADIR=/media/$USER
+
+myusage () {
+  echo ""
+  echo "Usage: $0 <mode>"
+  echo "  <mode>       : 'backup' or 'restore'"
+  echo ""
+  exit 1
+}
+
+
+if [[ $# -ne 1 ]]
+then
+  myusage
+fi
+
+MODE=$1
+case $MODE in
+  backup ) true ;;
+  restore ) true ;;
+  * ) myusage ;;
+esac
+
+countmedia=$( ls -1d $MEDIADIR/* 2> /dev/null | wc -l)
+while [[ $countmedia -le 0 ]]
+do
+  echo "No backup medium found. Please connect medium and press enter to retry"
+  echo "Press Ctrl-C to abort"
+  read a
+  countmedia=$( ls -1 $MEDIADIR/* 2> /dev/null | wc -l)
+done
+
+TMPFILE=$( mktemp -p /tmp backuptmp.XXXXXX )
+echo NONE > $TMPFILE
+
+ls -1d $MEDIADIR/* 2> /dev/null | while read dir
+do
+  targetdir="$dir/backup"
+  if [[ -d $targetdir ]]
+  then
+    perms=$( stat -c "%a" $targetdir )
+    if [[ $perms -eq 1777 ]]
+    then
+      echo $targetdir > $TMPFILE
+      break
+    else
+      echo "$targetdir has wrong permissions $perms, medium not usable for backup/restore"
+      echo NONE > $TMPFILE
+    fi
+  else
+    echo "$dir: Directory $targetdir not found, medium not usable for backup/restore"
+    echo NONE > $TMPFILE
+  fi
+done
+
+
+TARGETDIR=$( cat $TMPFILE )
+rm $TMPFILE
+
+if [[ $TARGETDIR == NONE ]]
+then
+  echo "No usable medium found, aborting"
+  exit 1
+fi
+
+echo "Using $TARGETDIR ..."
+
+udisks-backup $MODE $TARGETDIR
