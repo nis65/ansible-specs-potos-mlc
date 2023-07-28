@@ -1,0 +1,229 @@
+#!/bin/bash
+
+myusage () {
+  echo ""
+  echo "Usage: $0 <mode> <mount path>"
+  echo "  <mode>       : 'backup' or 'restore'"
+  echo "  <mount path> : absolute path to mounted backup partition"
+  echo ""
+  exit 1
+}
+
+if [[ $# -ne 2 ]]
+then
+  myusage
+fi
+
+saveddir=`pwd`
+cd ~
+
+myerror ( ) {
+  cd $saveddir
+  echo ""
+  echo $1
+  echo ""
+  echo "Press enter to close window"
+  echo ""
+  read wait
+  exit 1
+}
+
+MODE=$1
+INPUT_BACKUP_DIR=$2
+
+if [[ ! -d $INPUT_BACKUP_DIR ]]
+then
+  myerror "directory $INPUT_BACKUP_DIR not found"
+fi
+
+PART_DEV=`LANG=C df -k $INPUT_BACKUP_DIR | egrep -v ^Filesystem | awk '{ print $1 }'`
+UDISKS_MOUNT_POINT=`LANG=C df -k $INPUT_BACKUP_DIR | egrep -v ^Filesystem | awk '{ print $6 }'`
+DISK_DEV=`echo $PART_DEV | sed -e "s/[0-9][0-9]*$//"`
+
+if [[ "$MODE" == backup ]]
+then
+  true
+elif  [[ "$MODE" == restore ]]
+then
+  echo "WARNING: Restore is requested. Does the chosen medium REALLY contain"
+  echo "         the current data. Data on Laptop will be OVERWRITTEN!"
+  echo ""
+  echo "Do you really want to restore from external medium?"
+  read answer
+  if [[ $answer == 'j' || $answer == 'J' ||
+        $answer == 'y' || $answer == 'Y'    ]]
+  then
+    true
+  else
+    myerror "Restore aborted on your request"
+  fi
+else
+  myerror "Only 'backup' and 'restore' implemented (not '$MODE')"
+fi
+
+lookup () {
+DEVICE="$1"
+PARAM="$2"
+#udisks   --show-info         "$1" | sed -ne "s/^$2 *\(.*\)$/\1/p"
+udisksctl info --block-device "$1" | sed -ne "s/^$2 *\(.*\)$/\1/p"
+}
+
+lookupo () {
+DEVICE="$1"
+PARAM="$2"
+udisksctl info --object-path "$1" | sed -ne "s/^$2 *\(.*\)$/\1/p"
+}
+
+# check if udisks mount
+if mount | egrep "^$PART_DEV" | grep "uhelper=udisks" > /dev/null 2>&1
+then
+  echo Partition $PART_DEV is mounted by udisks, good.
+else
+  myerror "Partition $UDISKS_MOUNT_POINT on $PART_DEV is not mounted by udisks, aborting"
+fi
+
+# check filesystem type
+PART_FSTYPE=`lookup $PART_DEV "    IdType:"`
+if [[ "$PART_FSTYPE" == vfat ]]
+then
+  myerror "Error: Backup does not work with $PART_FSTYPE filesystems, aborting"
+else
+  echo Filesystem is $PART_FSTYPE, good.
+fi
+
+DISK_OBJ=`lookup $DISK_DEV "    Drive:"`
+DISK_OBJ=${DISK_OBJ##\'/org/freedesktop/UDisks2/}
+DISK_OBJ=${DISK_OBJ%%\'}
+
+DISK_NAME=`lookupo $DISK_OBJ "    Vendor:"`_`lookupo $DISK_OBJ "    Model:"`
+echo "$UDISKS_MOUNT_POINT is mounted on $PART_DEV on disk $DISK_NAME ($DISK_DEV)."
+
+# Now, check if REALLY external disk
+
+if [[ `lookup $DISK_DEV "    HintSystem:"` == "false" ]]
+then
+  echo Disk $DISK_DEV is external, good.
+else
+  myerror "Disk $DISK_DEV is system internal, aborting"
+fi
+
+
+if [[ `lookupo $DISK_OBJ "    Removable:"`  == "true" ]]
+then
+  echo Drive $DISK_OBJ is removable, good.
+else
+  myerror "Drive $DISK_OBJ is not removable, aborting"
+fi
+
+#######################################
+#######################################
+#  Drive is external, mounted by udisks, filesystem not vfat.
+#  Let's do some work now.
+#######################################
+#######################################
+
+function check_dir ( ) {
+  dir_to_check=$1
+  if [[ -d $dir_to_check && -w $dir_to_check ]]
+  then
+    true
+  else
+    false
+  fi
+}
+
+
+myumount () {
+  echo ""
+  echo "Finishing data write to backup medium..."
+  udisksctl unmount -b $PART_DEV
+  udisksctl power-off -b $DISK_DEV
+}
+
+echo "Stopping all programs"
+killall claws-mail
+killall soffice.bin oosplash
+killall firefox
+killall chromium-browser chromium-browser-sandbox
+killall nautilus
+
+
+BACKUP_DIR_ABS=${INPUT_BACKUP_DIR}/`whoami`
+
+if check_dir $BACKUP_DIR_ABS
+then
+  true
+elif [[ $MODE == backup ]]
+then
+  echo "transport directory $BACKUP_DIR_ABS not found."
+  echo "Use this medium for backup from now on?"
+  read answer
+  if [[ $answer == 'j' || $answer == 'J' ||
+        $answer == 'y' || $answer == 'Y'    ]]
+  then
+    echo "Creating transport directory $BACKUP_DIR_ABS"
+    mkdir -p $BACKUP_DIR_ABS
+  else
+    myexit "aborting (reply was $answer)"
+  fi
+else
+  myexit "Error: No restore data found. Aborting"
+fi
+
+if check_dir $BACKUP_DIR_ABS
+then
+  echo "transport directory found, going for $MODE..."
+else
+  myerror "Error: Cannot access transport directory $BACKUP_DIR_ABS"
+fi
+
+if [[ $MODE == backup ]]
+then
+  chmod 755 $HOME/.config/nautilus-actions
+  rsync -avx --delete \
+   "--exclude=.DCOPserver_*" --exclude=.dbus \
+    --exclude=.ICEauthority --exclude=.Xauthority \
+    --exclude=.xsession-errors \
+    --exclude=.googleearth/Cache/* \
+    --exclude=.cache/* \
+   $HOME/ $BACKUP_DIR_ABS
+else
+  rsync -avx --delete \
+   "--exclude=.DCOPserver_*" --exclude=.dbus \
+    --exclude=.ICEauthority --exclude=.Xauthority \
+    --exclude=.xsession-errors \
+    --exclude=.googleearth/Cache/* \
+    --exclude=.cache/* \
+   $BACKUP_DIR_ABS/ $HOME
+
+   # Adjust Claws Config
+   echo "`date`: Automatischer Mail-Download unterbinden"
+   CLAWS_DIR=~/.claws-mail
+   CLAWS_ACCOUNTRC=$CLAWS_DIR/accountrc
+   ed -s $CLAWS_ACCOUNTRC << EOF
+g/^ *remove_mail=.*$/s/^ *\(remove_mail\)=.*$/\1=0/g
+g/^ *message_leave_time=.*$/s/^ *\(message_leave_time\)=.*$/\1=0/g
+g/^ *message_leave_hour=.*$/s/^ *\(message_leave_hour\)=.*$/\1=0/g
+w
+q
+EOF
+   CLAWSRC=$CLAWS_DIR/clawsrc
+   ed -s $CLAWSRC << EOF
+g/^ *autochk_newmail=.*$/s/^ *\(autochk_newmail\)=.*$/\1=0/g
+g/^ *check_on_startup=.*$/s/^ *\(check_on_startup\)=.*$/\1=0/g
+w
+q
+EOF
+
+   myumount
+   echo ""
+   echo "Remove Backup medium and press enter to logout (needed after restore)"
+   read wait
+   gnome-session-quit --logout --no-prompt --force
+
+fi
+
+myumount
+echo "Remove Backup medium and press enter to close window"
+read wait
+
