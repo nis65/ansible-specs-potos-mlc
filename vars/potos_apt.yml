@@ -38,5 +38,6 @@ potos_apt_packages:
   - virt-manager
   - virt-viewer
   - remmina
+  - open-iscsi
   - ansible
   - google-earth-pro-stable
