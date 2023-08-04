@@ -39,5 +39,7 @@ potos_apt_packages:
   - virt-viewer
   - remmina
   - open-iscsi
+  - libdvd-pkg
+  - vlc
   - ansible
   - google-earth-pro-stable
