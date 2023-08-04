@@ -4,11 +4,17 @@ potos_apt_key:
   google_earth_key:
     url: https://dl.google.com/linux/linux_signing_key.pub
     filename: google_earth_key
+  signal_key:
+    url: https://updates.signal.org/desktop/apt/keys.asc
+    filename: signal_key
 
 potos_apt_repository:
   google_earth:
     filename: google-earth
     repo: deb [arch=amd64] http://dl.google.com/linux/earth/deb/ stable main
+  signal:
+    filename: signal
+    repo: deb [arch=amd64] https://updates.signal.org/desktop/apt xenial main
   ansible-ppa:
     filename: ansible-ppa
     repo: ppa:ansible/ansible
@@ -41,5 +47,8 @@ potos_apt_packages:
   - open-iscsi
   - libdvd-pkg
   - vlc
-  - ansible
+  - iftop
+  - iotop
   - google-earth-pro-stable
+  - signal-desktop
+  - ansible
