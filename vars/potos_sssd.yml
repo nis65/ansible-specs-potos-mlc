@@ -1,0 +1,27 @@
+---
+
+potos_sssd_ca_cert_url: "http://ucsmas.t7.iselin.net/ucs-root-ca.crt"
+
+potos_sssd_integration: "ldap"
+potos_sssd_force_template: no
+
+potos_sssd_ldap:
+  uri: "ldaps://ucsmas.t7.iselin.net:7636,ldaps://ucssmb.t7.iselin.net:7636"
+  search_base: "dc=t7,dc=iselin,dc=net"
+  default_bind_dn: "uid=ropam,cn=users,dc=t7,dc=iselin,dc=net"
+  default_authtok: TBD
+  access_provider_simple_allow_groups: t7login
+
+potos_sssd_pam_mount:
+  cifs:
+    - server: "ucssmb.t7.iselin.net"
+      path: "%(USER)"
+      mountpoint: "/home/%(USER)/share"
+      options: "nosuid,nodev,noexec"
+      sgroup: "t7login"
+    - server: "ucssmb.t7.iselin.net"
+      path: "mp3-coll"
+      mountpoint: "/home/%(USER)/MP3"
+      options: "nosuid,nodev,noexec,ro"
+      sgroup: "t7login"
+
