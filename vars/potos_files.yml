@@ -42,6 +42,8 @@ potos_files_allow_local_ssh_groups:
 potos_files_allow_network_edit_groups: '{{ potos_files_allow_local_ssh_groups }}'
 potos_files_allow_cifs_mount_groups: '{{ potos_files_allow_local_ssh_groups }}'
 
+potos_openvpn_allow_install_groups: '{{ potos_files_allow_local_ssh_groups }}'
+
 potos_files_allow_remote_ssh_groups:
   - mlclogin
   - t7login
