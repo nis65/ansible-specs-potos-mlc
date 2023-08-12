@@ -35,13 +35,12 @@ potos_files:
   - src: "etc/security/access.conf"
     dest: "/etc/security/access.conf"
 
-potos_files_allow_group: "potos"
-
 potos_files_allow_local_ssh_groups:
   - mlc
   - t7mlc
 
 potos_files_allow_network_edit_groups: '{{ potos_files_allow_local_ssh_groups }}'
+potos_files_allow_cifs_mount_groups: '{{ potos_files_allow_local_ssh_groups }}'
 
 potos_files_allow_remote_ssh_groups:
   - mlclogin
