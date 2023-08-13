@@ -20,6 +20,9 @@ potos_files:
   - src: "etc/sudoers.d/potos_mount_smb_sudo"
     dest: "/etc/sudoers.d/potos_mount_smb_sudo"
     mode: "640"
+  - src: "etc/sudoers.d/potos_ansible_pull"
+    dest: "/etc/sudoers.d/potos_ansible_pull"
+    mode: "640"
   - src: "etc/vim/vimrc.local"
     dest: "/etc/vim/vimrc.local"
   - src: "etc/profile.d/Z99-mlc-settings.sh"
@@ -41,6 +44,7 @@ potos_files_allow_local_ssh_groups:
 
 potos_files_allow_network_edit_groups: '{{ potos_files_allow_local_ssh_groups }}'
 potos_files_allow_cifs_mount_groups: '{{ potos_files_allow_local_ssh_groups }}'
+potos_files_allow_ansible_pull_groups: '{{ potos_files_allow_local_ssh_groups }}'
 
 potos_openvpn_allow_install_groups: '{{ potos_files_allow_local_ssh_groups }}'
 

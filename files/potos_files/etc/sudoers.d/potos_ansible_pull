@@ -1,0 +1,4 @@
+User_Alias ANSIBLEPULLUSERS = %{{ potos_files_allow_ansible_pull_groups | join (', %') }}
+
+ANSIBLEPULLUSERS     ALL=(root) NOPASSWD: /usr/local/bin/mlc-ansible-pull -v -r daily
+ANSIBLEPULLUSERS     ALL=(root) NOPASSWD: /usr/local/bin/mlc-ansible-pull -v -r hourly
