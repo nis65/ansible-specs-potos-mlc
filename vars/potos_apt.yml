@@ -49,6 +49,8 @@ potos_apt_packages:
   - vlc
   - iftop
   - iotop
+  - default-jre
+  - ure-java
   - google-earth-pro-stable
   - signal-desktop
   - ansible
