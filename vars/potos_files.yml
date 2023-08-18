@@ -20,6 +20,9 @@ potos_files:
   - src: "etc/sudoers.d/potos_mount_smb_sudo"
     dest: "/etc/sudoers.d/potos_mount_smb_sudo"
     mode: "640"
+  - src: "etc/sudoers.d/potos_ansible_pull"
+    dest: "/etc/sudoers.d/potos_ansible_pull"
+    mode: "640"
   - src: "etc/vim/vimrc.local"
     dest: "/etc/vim/vimrc.local"
   - src: "etc/profile.d/Z99-mlc-settings.sh"
@@ -30,8 +33,30 @@ potos_files:
     dest: "/usr/local/src/potos_files/ssh_controlmaster.conf"
   - src: "etc/mlc/yaru_override.css"
     dest: "/etc/mlc/yaru_override.css"
+  - src: "etc/ssh/sshd_config.d/10-mlc.conf"
+    dest: "/etc/ssh/sshd_config.d/10-mlc.conf"
+  - src: "etc/security/access.conf"
+    dest: "/etc/security/access.conf"
 
-potos_files_allow_group: "potos"
+potos_files_allow_local_ssh_groups:
+  - mlc
+  - t7mlc
+
+potos_files_allow_network_edit_groups: '{{ potos_files_allow_local_ssh_groups }}'
+potos_files_allow_cifs_mount_groups: '{{ potos_files_allow_local_ssh_groups }}'
+potos_files_allow_ansible_pull_groups: '{{ potos_files_allow_local_ssh_groups }}'
+
+potos_openvpn_allow_install_groups: '{{ potos_files_allow_local_ssh_groups }}'
+
+potos_files_allow_remote_ssh_groups:
+  - mlclogin
+  - t7login
+
+potos_files_edits:
+  - path: "/etc/pam.d/sshd"
+    linecontent: "account  required     pam_access.so"
+    lineregexp: "^#{,1}[# ]*account.*pam_access.so$"
+    insertbefore: "^@include common-account$"
 
 potos_files_diverts:
   - path: "/usr/share/themes/Yaru/gtk-3.0/gtk.css"

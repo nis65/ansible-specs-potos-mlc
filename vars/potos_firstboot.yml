@@ -7,6 +7,6 @@ potos_firstboot_initial_user_delete_admin_iso_user: false
 potos_firstboot_local_user_add: true
 potos_firstboot_local_groups:
   - mlc
-  - potos
+  - mlclogin
 potos_firstboot_local_user_groups:
-  - potos
+  - mlc

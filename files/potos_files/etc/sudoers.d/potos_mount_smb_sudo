@@ -1,3 +1,5 @@
 Defaults!/usr/sbin/mount.cifs env_keep+=PASSWD
-ALL     ALL=(root) NOPASSWD: /usr/sbin/mount.cifs *
-ALL     ALL=(root) NOPASSWD: /usr/bin/umount -t cifs *
+User_Alias SMBMOUNTUSERS = %{{ potos_files_allow_cifs_mount_groups | join (', %') }}
+
+SMBMOUNTUSERS     ALL=(root) NOPASSWD: /usr/sbin/mount.cifs *
+SMBMOUNTUSERS     ALL=(root) NOPASSWD: /usr/bin/umount -t cifs *
