@@ -25,4 +25,5 @@ potos_dconf_custom:
           - "amsel-menu.desktop"
           - "Local.desktop"
           - "Internet.desktop"
+          - "Multimedia.desktop"
 

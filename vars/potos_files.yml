@@ -5,6 +5,8 @@ potos_files:
     dest: "/usr/local/share/applications/Local.desktop"
   - src: "usr/local/share/applications/Internet.desktop"
     dest: "/usr/local/share/applications/Internet.desktop"
+  - src: "usr/local/share/applications/Multimedia.desktop"
+    dest: "/usr/local/share/applications/Multimedia.desktop"
   - src: "usr/local/bin/mount_smb_sudo"
     dest: "/usr/local/bin/mount_smb_sudo"
     mode: "755"
