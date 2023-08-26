@@ -56,6 +56,8 @@ potos_apt_packages:
   - iotop
   - default-jre
   - ure-java
+  - pwgen
+  - meld
   - google-earth-pro-stable
   - signal-desktop
   - ansible
