@@ -61,3 +61,6 @@ potos_apt_packages:
   - google-earth-pro-stable
   - signal-desktop
   - ansible
+
+potos_apt_packages_remove:
+  - cloud-init
