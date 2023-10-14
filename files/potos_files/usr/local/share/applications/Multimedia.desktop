@@ -1,0 +1,43 @@
+[Desktop Entry]
+Icon=applications-multimedia.svg
+Type=Application
+Name=Multimedia
+Actions=ImageViewer;SimpleScan;GIMPImageEditor;VLCmediaplayer;Screenshot
+Exec=eog %F
+
+[Desktop Action ImageViewer]
+Exec=eog %F
+Type=application
+Name=Image Viewer
+Icon=eog
+
+[Desktop Action SimpleScan]
+Exec=simple-scan
+Type=Application
+Name=Simple Scan
+Icon=scanner
+
+[Desktop Action GIMPImageEditor]
+Exec=gimp %U
+Type=Application
+Name=GIMP Image Editor
+Icon=gimp
+
+[Desktop Action VLCmediaplayer]
+Name=VLC media player
+Exec=/usr/bin/vlc %U
+Icon=vlc
+Type=Application
+
+[Desktop Action Screenshot]
+Exec=gnome-screenshot -a
+Type=application
+Name=Screenshot
+Icon=applets-screenshooter
+
+[Desktop Action Sonata]
+Exec=sonata
+Type=Application
+Name=Sonata
+Icon=sonata
+

@@ -30,6 +30,11 @@ potos_apt_packages:
   - dbus-x11
   - blockout2
   - claws-mail
+  - aspell-de
+  - gnome-screenshot
+  - gimp
+  - gimp-help-en
+  - gimp-help-de
   - gnome-remote-desktop
   - pipewire-media-session
   - mpc
@@ -51,6 +56,8 @@ potos_apt_packages:
   - iotop
   - default-jre
   - ure-java
+  - pwgen
+  - meld
   - google-earth-pro-stable
   - signal-desktop
   - ansible
