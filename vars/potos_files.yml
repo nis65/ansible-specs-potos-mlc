@@ -19,11 +19,17 @@ potos_files:
   - src: "usr/local/bin/udisks-backup"
     dest: "/usr/local/bin/udisks-backup"
     mode: "755"
+  - src: "usr/local/bin/update-system"
+    dest: "/usr/local/bin/update-system"
+    mode: "755"
   - src: "etc/sudoers.d/potos_mount_smb_sudo"
     dest: "/etc/sudoers.d/potos_mount_smb_sudo"
     mode: "640"
   - src: "etc/sudoers.d/potos_ansible_pull"
     dest: "/etc/sudoers.d/potos_ansible_pull"
+    mode: "640"
+  - src: "etc/sudoers.d/potos_update_system"
+    dest: "/etc/sudoers.d/potos_update_system"
     mode: "640"
   - src: "etc/vim/vimrc.local"
     dest: "/etc/vim/vimrc.local"
@@ -47,6 +53,7 @@ potos_files_allow_local_ssh_groups:
 potos_files_allow_network_edit_groups: '{{ potos_files_allow_local_ssh_groups }}'
 potos_files_allow_cifs_mount_groups: '{{ potos_files_allow_local_ssh_groups }}'
 potos_files_allow_ansible_pull_groups: '{{ potos_files_allow_local_ssh_groups }}'
+potos_files_allow_update_system_groups: '{{ potos_files_allow_local_ssh_groups }}'
 
 potos_openvpn_allow_install_groups: '{{ potos_files_allow_local_ssh_groups }}'
 

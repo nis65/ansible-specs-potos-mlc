@@ -1,0 +1,3 @@
+User_Alias UPDATEUSERS = %{{ potos_files_allow_update_system_groups | join (', %') }}
+
+UPDATEUSERS     ALL=(root) NOPASSWD: /usr/local/bin/update-system
