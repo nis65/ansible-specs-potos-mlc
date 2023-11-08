@@ -1,5 +1,5 @@
 #!/bin/bash
 
 apt-get update
-apt-get upgrade --with-new-pkgs --yes
+yes | apt-get upgrade --with-new-pkgs --yes
 snap refresh
