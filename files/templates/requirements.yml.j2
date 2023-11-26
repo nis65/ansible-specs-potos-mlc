@@ -1,8 +1,8 @@
 ---
 {% if potos_runtype == 'setup' %}
 - name: firstboot
-  src: git+https://github.com/nis65/ansible-role-potos_firstboot
-  version: 'develop'
+  src: git+https://github.com/projectpotos/ansible-role-potos_firstboot
+  version: 'main'
 {% endif %}
 - name: basics
   src: git+https://github.com/nis65/ansible-role-potos_basics.git
@@ -14,31 +14,31 @@
 
 - name: dconf
   src: git+https://github.com/nis65/ansible-role-potos_dconf.git
-  version: 'develop'
+  version: 'main'
 
 - name: mimeapps
   src: git+https://github.com/nis65/ansible-role-potos_mimeapps.git
-  version: 'develop'
+  version: 'main'
 
 - name: locale
   src: git+https://github.com/nis65/ansible-role-potos_locale.git
-  version: 'develop'
+  version: 'main'
 
 - name: time
   src: git+https://github.com/nis65/ansible-role-potos_time.git
-  version: 'develop'
+  version: 'main'
 
 - name: openvpn
   src: git+https://github.com/nis65/ansible-role-potos_openvpn.git
-  version: 'develop'
+  version: 'main'
 
 - name: argos
   src: git+https://github.com/nis65/ansible-role-potos_argos.git
-  version: 'develop'
+  version: 'main'
 
 - name: files
   src: git+https://github.com/nis65/ansible-role-potos_files.git
-  version: 'develop'
+  version: 'main'
 
 - name: apt
   src: git+https://github.com/projectpotos/ansible-role-potos_apt.git
@@ -46,12 +46,12 @@
 
 - name: hibernate
   src: git+https://github.com/nis65/ansible-role-potos_hibernate.git
-  version: 'develop'
+  version: 'main'
 
 - name: sssd
   src: git+https://github.com/nis65/ansible-role-potos_sssd.git
-  version: 'develop'
+  version: 'main'
 
 - name: snap
   src: git+https://github.com/nis65/ansible-role-potos_snap.git
-  version: 'develop'
+  version: 'main'
