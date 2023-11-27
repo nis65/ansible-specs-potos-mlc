@@ -58,6 +58,7 @@ potos_apt_packages:
   - ure-java
   - pwgen
   - meld
+  - mumble
   - google-earth-pro-stable
   - signal-desktop
   - ansible
