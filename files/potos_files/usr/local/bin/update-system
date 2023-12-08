@@ -1,5 +1,12 @@
 #!/bin/bash
 
-apt-get update
-yes | apt-get upgrade --with-new-pkgs --yes
+apt-get update 2> /dev/null
+LANG=C DEBIAN_FRONTEND=noninteractive apt-get upgrade --with-new-pkgs --yes
+HELDBACK=$( LANG=C apt list --upgradable 2> /dev/null | grep -v ^Listing | sed -e "s|^\([^/]*\)/.*$|\1|")
+if [[ ! -z "$HELDBACK" ]]
+then
+  LANG=C DEBIAN_FRONTEND=noninteractive apt-get upgrade --with-new-pkgs --yes $HELDBACK
+fi
+apt autoremove --yes
+apt-get clean
 snap refresh
