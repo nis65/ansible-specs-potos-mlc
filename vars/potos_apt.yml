@@ -59,6 +59,12 @@ potos_apt_packages:
   - pwgen
   - meld
   - mumble
+  - libreoffice-help-de
+  - libreoffice-l10n-de
+  - hunspell-de-ch-frami
+  - hyphen-de
+  - mythes-de
+  - mythes-de-ch
   - google-earth-pro-stable
   - signal-desktop
   - ansible
