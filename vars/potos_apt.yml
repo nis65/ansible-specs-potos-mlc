@@ -62,5 +62,5 @@ potos_apt_packages:
   - signal-desktop
   - ansible
 
-potos_apt_packages_remove:
-  - cloud-init
+#potos_apt_packages_remove:
+#  - cloud-init
