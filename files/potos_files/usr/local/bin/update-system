@@ -7,6 +7,7 @@ if [[ ! -z "$HELDBACK" ]]
 then
   LANG=C DEBIAN_FRONTEND=noninteractive apt-get upgrade --with-new-pkgs --yes $HELDBACK
 fi
+apt --fix-broken install --yes
 apt autoremove --yes
 apt-get clean
 snap refresh
