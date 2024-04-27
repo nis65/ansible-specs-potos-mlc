@@ -41,6 +41,8 @@ potos_files:
     dest: "/usr/local/src/potos_files/ssh_controlmaster.conf"
   - src: "etc/mlc/yaru_override.css"
     dest: "/etc/mlc/yaru_override.css"
+  - src: "etc/apparmor.d/local/usr.bin.evince"
+    dest: "/etc/apparmor.d/local/usr.bin.evince"
   - src: "etc/ssh/sshd_config.d/10-mlc.conf"
     dest: "/etc/ssh/sshd_config.d/10-mlc.conf"
   - src: "etc/security/access.conf"
