@@ -22,7 +22,7 @@ potos_apt_repository:
 potos_apt_packages:
   - firefox
   - chromium-browser
-  - chromium-codecs-ffmpeg
+  - ubuntu-restricted-extras
   - apt-file
   - pm-utils
   - smbclient
@@ -45,6 +45,7 @@ potos_apt_packages:
   - keepassxc
   - texlive-latex-extra
   - texlive-fonts-extra
+  - fonts-kaushanscript
   - virt-manager
   - virt-viewer
   - remmina
@@ -62,5 +63,51 @@ potos_apt_packages:
   - signal-desktop
   - ansible
 
-#potos_apt_packages_remove:
-#  - cloud-init
+potos_apt_packages_remove:
+  - chromium-codecs-ffmpeg
+  - fonts-beng
+  - fonts-beng-extra
+  - fonts-deva
+  - fonts-deva-extra
+  - fonts-gujr
+  - fonts-gujr-extra
+  - fonts-guru
+  - fonts-guru-extra
+  - fonts-knda
+  - fonts-lohit-beng-assamese
+  - fonts-lohit-beng-bengali
+  - fonts-mlym
+  - fonts-orya
+  - fonts-orya-extra
+  - fonts-smc
+  - fonts-smc-anjalioldlipi
+  - fonts-smc-chilanka
+  - fonts-smc-dyuthi
+  - fonts-smc-gayathri
+  - fonts-smc-karumbi
+  - fonts-smc-keraleeyam
+  - fonts-smc-manjari
+  - fonts-smc-meera
+  - fonts-smc-rachana
+  - fonts-smc-raghumalayalamsans
+  - fonts-smc-suruma
+  - fonts-smc-uroob
+  - fonts-stix
+  - fonts-taml
+  - fonts-telu
+  - fonts-telu-extra
+  - fonts-teluguvijayam
+  - fonts-thai-tlwg
+  - fonts-droid-fallback
+  - fonts-kacst
+  - fonts-kacst-one
+  - fonts-khmeros-core
+  - fonts-lao
+  - fonts-lklug-sinhala
+  - fonts-noto-cjk
+  - fonts-noto-color-emoji
+  - fonts-noto-core
+  - fonts-noto-mono
+  - fonts-pagul
+  - fonts-sil-abyssinica
+  - fonts-tibetan-machine
