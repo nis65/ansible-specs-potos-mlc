@@ -22,7 +22,7 @@ potos_apt_repository:
 potos_apt_packages:
   - firefox
   - chromium-browser
-  - chromium-codecs-ffmpeg
+  - ubuntu-restricted-extras
   - apt-file
   - pm-utils
   - smbclient
@@ -45,6 +45,7 @@ potos_apt_packages:
   - keepassxc
   - texlive-latex-extra
   - texlive-fonts-extra
+  - fonts-kaushanscript
   - virt-manager
   - virt-viewer
   - remmina
@@ -63,6 +64,7 @@ potos_apt_packages:
   - ansible
 
 potos_apt_packages_remove:
+  - chromium-codecs-ffmpeg
   - fonts-beng
   - fonts-beng-extra
   - fonts-deva
@@ -90,6 +92,7 @@ potos_apt_packages_remove:
   - fonts-smc-raghumalayalamsans
   - fonts-smc-suruma
   - fonts-smc-uroob
+  - fonts-stix
   - fonts-taml
   - fonts-telu
   - fonts-telu-extra
