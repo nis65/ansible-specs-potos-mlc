@@ -8,6 +8,7 @@ then
   LANG=C DEBIAN_FRONTEND=noninteractive apt-get upgrade --with-new-pkgs --yes $HELDBACK
 fi
 apt --fix-broken install --yes
+apt-get purge $( dpkg --get-selections | grep deinstall$ | sed -e "s/\s*deinstall$//" )  --yes
 apt autoremove --yes
 apt-get clean
 snap refresh
