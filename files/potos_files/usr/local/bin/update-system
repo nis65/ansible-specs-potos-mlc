@@ -12,3 +12,5 @@ apt-get purge $( dpkg --get-selections | grep deinstall$ | sed -e "s/\s*deinstal
 apt autoremove --yes
 apt-get clean
 snap refresh
+
+/usr/local/bin/update-ttffonts /usr/share/fonts

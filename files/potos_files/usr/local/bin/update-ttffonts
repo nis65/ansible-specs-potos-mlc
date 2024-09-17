@@ -1,0 +1,91 @@
+#!/bin/bash
+
+# needs pkgs:
+#  fontconfig (probably already installed)
+#  fontforge
+
+# setting to 0 only gives a message when a font is created, an error happens and final stats
+# setting to 1 outputs a line per font even if it is just skipped.
+VERBOSE=0
+
+SKIPPED=0
+CREATED=0
+FAILED=0
+
+if [[ -z "$1" ]]
+then
+  basedir=$( realpath . )
+else
+  basedir=$1
+fi
+
+if [[ ! ( -d $basedir && -w $basedir && -r $basedir) ]]
+then
+  echo $basedir is not a read/writable directory
+  exit 1
+fi
+
+createttf () {
+
+sourcefile=$1
+SCRIPTFILE=$( mktemp -p /tmp ffscript.XXXXXX )
+
+cat << EOF > $SCRIPTFILE
+Open(\$1)
+Generate(\$1:r + ".ttf")
+EOF
+
+fontforge -nosplash -lang=ff -script $SCRIPTFILE $sourcefile > /dev/null 2>&1
+rm $SCRIPTFILE
+}
+
+getfontname () {
+
+sourcefile=$1
+fc-list | grep "$sourcefile" | sed -ne "s/^[^:]*: \(.*\)$/\1/p"
+}
+
+
+echo Checking if all pfb fonts in $basedir and create ttf font if needed.
+
+# loop over all pfb files (including symlinks) in $basedir (or further down).
+# moved input list creation to end of loop to remove need for subshell so that stats work seamlessly
+
+while read pfbfile
+do
+  if [[ -h $pfbfile ]]
+  then
+    type=link
+  else
+    type=file
+  fi
+  ttfile=${pfbfile%%pfb}ttf
+  if [[ -r $ttfile && $ttfile -nt $pfbfile ]]
+  then
+    SKIPPED=$(( SKIPPED + 1 ))
+    if [[ ${VERBOSE} -eq 1 ]]
+    then
+      echo "$ttfile exists and is younger than $type $pfbfile, skipping $( getfontname $ttfile )"
+    fi
+  else
+    echo -n "$ttfile does not exist or is older than $type $pfbfile, creating now..."
+    createttf $pfbfile
+    if [[ -r $ttfile && $ttfile -nt $pfbfile ]]
+    then
+      CREATED=$(( CREATED + 1 ))
+      echo " Success $( getfontname $ttfile )"
+    else
+      FAILED=$(( FAILED + 1 ))
+      echo "Failure: Could not create."
+    fi
+  fi
+done < <( find $basedir -follow -type f -iname "*\.pfb" 2> /dev/null )
+
+echo "total $(( SKIPPED + CREATED + FAILED )) fonts: SKIPPED: $SKIPPED, CREATED: $CREATED, FAILED: $FAILED"
+if [[ $FAILED -gt 0 ]]
+then
+  exit 1
+else
+  exit 0
+fi
+
