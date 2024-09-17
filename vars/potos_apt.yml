@@ -46,6 +46,7 @@ potos_apt_packages:
   - texlive-latex-extra
   - texlive-fonts-extra
   - fonts-kaushanscript
+  - fontforge
   - virt-manager
   - virt-viewer
   - remmina
