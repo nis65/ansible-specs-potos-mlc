@@ -36,7 +36,6 @@ potos_apt_packages:
   - gimp-help-en
   - gimp-help-de
   - gnome-remote-desktop
-  - pipewire-media-session
   - mpc
   - pavucontrol
   - coreutils
