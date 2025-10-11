@@ -3,10 +3,13 @@
 potos_apt_key:
   google_earth_key:
     url: https://dl.google.com/linux/linux_signing_key.pub
-    filename: google_earth_key
+    filename: google_earth_key_2025_10
   signal_key:
     url: https://updates.signal.org/desktop/apt/keys.asc
     filename: signal_key
+
+potos_apt_key_remove:
+  - A040830F7FAC5991
 
 potos_apt_repository:
   google_earth:
