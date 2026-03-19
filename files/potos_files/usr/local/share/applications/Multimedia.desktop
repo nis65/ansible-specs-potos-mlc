@@ -2,7 +2,7 @@
 Icon=applications-multimedia.svg
 Type=Application
 Name=Multimedia
-Actions=ImageViewer;SimpleScan;GIMPImageEditor;VLCmediaplayer;Screenshot
+Actions=ImageViewer;SimpleScan;GIMPImageEditor;VLCmediaplayer;Screenshot;BarcodeScanner
 Exec=eog %F
 
 [Desktop Action ImageViewer]
@@ -41,3 +41,8 @@ Type=Application
 Name=Sonata
 Icon=sonata
 
+[Desktop Action BarcodeScanner]
+Name=Camera Barcode Scanner
+Type=Application
+Exec=zbarcam-gtk
+Icon=accessories-camera

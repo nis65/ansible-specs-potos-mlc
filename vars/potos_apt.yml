@@ -65,6 +65,7 @@ potos_apt_packages:
   - google-earth-pro-stable
   - signal-desktop
   - ansible
+  - zbarcam-gtk
 
 potos_apt_packages_remove:
   - chromium-codecs-ffmpeg
