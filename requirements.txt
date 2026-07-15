@@ -1,6 +1,6 @@
 
 # At least Ansible 2.12 is needed due to used features like 'argument_specs'
-ansible>=14.1.0
+ansible>=14.2.0
 
 # Required for testing
 ansible-lint[yamllint]
